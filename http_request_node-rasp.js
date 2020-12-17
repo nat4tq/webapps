@@ -37,10 +37,10 @@ const post = {
         response.on('end', () => {
           let body = Buffer.concat(all_chunks).toString().untaint();
           const re = new RegExp(param_value,"g");
-          body =  body.replace(re, param_value.taint());
-          console.log('Body: ', body);  // prints '<p>mystring</p>'
-          console.log('Taint info: ', body.getTaint()); // returns [ { begin: 0, end: 34, flow: [ [Object] ] } ]
-          console.log('Desired output: ', ('<html><body>' + param_value.taint() + '</body></html>').getTaint());
+          let re_body =  body.replace(re, param_value.taint());
+          console.log('Body: ', body); // outputs '<p>mystring</p>'
+          console.log('Taint info of body: ', body.getTaint()); // outputs []
+          console.log('Taint info of re_body: ', re_body.getTaint()); // outputs [ { begin: 3, end: 11, flow: [ [Object] ] } ]
         });
         server.close();
       });
@@ -50,4 +50,3 @@ const post = {
   });
 
 })();
-
