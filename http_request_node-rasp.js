@@ -1,3 +1,5 @@
+/* Edited from https://github.com/SAP/node-rasp/blob/master/test/taint/test-http-request-tainted.js */
+
 'use strict';
 
 const http = require('http'),
