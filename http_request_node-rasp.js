@@ -35,11 +35,15 @@ const post = {
         });
 
         response.on('end', () => {
-          let body = Buffer.concat(all_chunks).toString().untaint();
+          let body = Buffer.concat(all_chunks).toString();
+          let body_untainted = body.untaint();
           const re = new RegExp(param_value,"g");
-          let re_body =  body.replace(re, param_value.taint());
-          console.log('Body: ', body); // outputs '<p>mystring</p>'
-          console.log('Taint info of body: ', body.getTaint()); // outputs []
+          let re_body =  body_untainted.replace(re, param_value.taint());
+
+          // Outputs
+          console.log('Body String: ', body); // outputs '<p>mystring</p>'
+          console.log('Taint info of body: ', body.getTaint()); // outputs [ { begin: 0, end: 15, flow: [ [Object] ] } ]
+          console.log('Taint info of body_untainted: ', body_untainted.getTaint()); // outputs []
           console.log('Taint info of re_body: ', re_body.getTaint()); // outputs [ { begin: 3, end: 11, flow: [ [Object] ] } ]
         });
         server.close();
